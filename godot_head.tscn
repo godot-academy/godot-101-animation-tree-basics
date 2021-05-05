@@ -1,0 +1,131 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://blue_material.tres" type="Material" id=1]
+[ext_resource path="res://godot_head.gltf" type="PackedScene" id=2]
+[ext_resource path="res://black_material.tres" type="Material" id=3]
+[ext_resource path="res://godot_head.gd" type="Script" id=4]
+
+[sub_resource type="AnimationNodeAnimation" id=5]
+animation = "right_eye_blink"
+
+[sub_resource type="AnimationNodeAnimation" id=6]
+animation = "talk"
+
+[sub_resource type="AnimationNodeAnimation" id=4]
+animation = "left_eye_blink"
+
+[sub_resource type="AnimationNodeBlend2" id=7]
+
+[sub_resource type="AnimationNodeBlend2" id=13]
+
+[sub_resource type="AnimationNodeTimeSeek" id=14]
+
+[sub_resource type="AnimationNodeTimeScale" id=11]
+
+[sub_resource type="AnimationNodeTimeScale" id=12]
+
+[sub_resource type="AnimationNodeBlendTree" id=1]
+graph_offset = Vector2( 0, 14 )
+nodes/Animation/node = SubResource( 4 )
+nodes/Animation/position = Vector2( -20, 40 )
+"nodes/Animation 2/node" = SubResource( 5 )
+"nodes/Animation 2/position" = Vector2( -20, 160 )
+"nodes/Animation 3/node" = SubResource( 6 )
+"nodes/Animation 3/position" = Vector2( 0, 280 )
+nodes/Blend2/node = SubResource( 13 )
+nodes/Blend2/position = Vector2( 380, -40 )
+"nodes/Blend2 2/node" = SubResource( 7 )
+"nodes/Blend2 2/position" = Vector2( 580, 140 )
+nodes/Seek/node = SubResource( 14 )
+nodes/Seek/position = Vector2( 180, 160 )
+nodes/TimeScale/node = SubResource( 12 )
+nodes/TimeScale/position = Vector2( 180, 40 )
+"nodes/TimeScale 2/node" = SubResource( 11 )
+"nodes/TimeScale 2/position" = Vector2( 180, 280 )
+nodes/output/position = Vector2( 800, 20 )
+node_connections = [ "TimeScale 2", 0, "Animation 3", "Blend2", 0, "TimeScale", "Blend2", 1, "Seek", "Seek", 0, "Animation 2", "TimeScale", 0, "Animation", "Blend2 2", 0, "Blend2", "Blend2 2", 1, "TimeScale 2", "output", 0, "Blend2 2" ]
+
+[sub_resource type="Animation" id=3]
+resource_name = "left_eye_blink"
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Head/L:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5, 1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( -0.302283, -0.302283, -0.302283 ), Vector3( 0, -0.302, -0.302 ), Vector3( -0.302283, -0.302283, -0.302283 ) ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "right_eye_blink"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Head/R:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5, 1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( -0.302, -0.313, -0.302 ), Vector3( -0.302, -0.313, 0 ), Vector3( -0.302, -0.313, -0.302 ) ]
+}
+
+[sub_resource type="Animation" id=9]
+resource_name = "talk"
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Jaw:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ), Vector3( 0, -0.23379, 0 ), Vector3( 0, 0.123047, 0 ) ]
+}
+
+[node name="godot_head" instance=ExtResource( 2 )]
+script = ExtResource( 4 )
+
+[node name="Jaw" parent="." index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0377093, 0 )
+material/0 = ExtResource( 1 )
+
+[node name="Head" parent="." index="1"]
+material/0 = ExtResource( 1 )
+
+[node name="L" parent="Head" index="0"]
+transform = Transform( -0.142891, 0, 0, 0, 1.32067e-08, 0.302134, 0, -0.302134, 1.32067e-08, 1.02932, 0, 0.0202987 )
+material/0 = ExtResource( 3 )
+
+[node name="R" parent="Head" index="1"]
+transform = Transform( -0.302, 0, 0, 0, 1.36817e-08, 0.302, 0, -0.313, 1.32008e-08, -1.0444, 0, 0.0202987 )
+material/0 = ExtResource( 3 )
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="2"]
+tree_root = SubResource( 1 )
+anim_player = NodePath("../AnimationPlayer")
+active = true
+parameters/Blend2/blend_amount = 0.57
+"parameters/Blend2 2/blend_amount" = 0.06
+parameters/Seek/seek_position = -1.0
+parameters/TimeScale/scale = 0.0
+"parameters/TimeScale 2/scale" = 0.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="3"]
+anims/left_eye_blink = SubResource( 3 )
+anims/right_eye_blink = SubResource( 2 )
+anims/talk = SubResource( 9 )
+
+[node name="Camera" type="Camera" parent="." index="4"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.22578, 6 )
+projection = 1
+size = 5.0
